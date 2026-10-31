@@ -207,7 +207,7 @@ DashboardScreen ................. Panel principal (rol + nombre, acciones rápid
 ### Flujo 2 — Registro Facial y Asistencia (Mobile)
 
 1. `DashboardScreen` → tarjeta "Registrar rostro" → `RegisterFace` → captura → `POST /biometric/facial/enroll` (`06` vía Kong) → `SuccessScreen` si OK, reintento si falla.
-2. **Asistencia del día a día** (dispositivo edge, no pantalla de la app): contenedor `faceattend-edge` → `facialIdentify` / `facialVerify` (`06`) → registro de asistencia (`05`).
+2. **Asistencia del día a día** (dispositivo edge, no pantalla de la app): contenedor `fae-edge` → `facialIdentify` / `facialVerify` (`06`) → registro de asistencia (`05`).
    - Reconocido → registro creado (entrada/salida).
    - **NO reconocido** → `FacialFailScreen` → reintentar **O** justificar manualmente (`MenuJustify` → `AddJustification`).
 

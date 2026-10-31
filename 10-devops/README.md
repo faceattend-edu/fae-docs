@@ -67,7 +67,7 @@ migration chain, verification via Kong smoke route + login + seed tool, common i
 
 ## Common issues
 - **Port in use:** `lsof -i :8000` (frontend must be 8090, NOT 8082 — taken by ms-authorization)
-- **DB not connecting:** verify Docker is running; containers talk via network `faceattend-data` using host `postgres:5432`
+- **DB not connecting:** verify Docker is running; containers talk via network `fae-data` using host `postgres:5432`
 - **Kong stuck `starting`:** it waits for all 8 ms-* healthy — find the failing one with `docker compose logs ms-X`
 ```
 

@@ -78,7 +78,7 @@ Kong 3.6 OSS can terminate TLS, but certificate issuance and renewal would be ma
 
 | Risk | Probability | Impact | Mitigation |
 |------|------------|--------|-----------|
-| ACME fails (DNS not pointing at host, ports closed) | Medium | High | Check `docker logs faceattend-caddy`; keep 80/443 open; verify DNS before deploy |
+| ACME fails (DNS not pointing at host, ports closed) | Medium | High | Check `docker logs fae-caddy`; keep 80/443 open; verify DNS before deploy |
 | Let's Encrypt rate limits when re-creating volumes | Low | Medium | Never delete `caddy_data` on redeploy |
 | Direct HTTP access to Kong `:8000` bypasses TLS | Medium | Medium | Restrict `:8000` in the EC2 security group once clients use `https://` |
 

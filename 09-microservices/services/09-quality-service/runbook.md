@@ -14,10 +14,10 @@
 | Field | Value |
 |-------|-------|
 | Local port | 8089 |
-| Compose service / container | `ms-quality` / `faceattend-ms-quality` |
+| Compose service / container | `ms-quality` / `fae-ms-quality` |
 | Through Kong | `http://localhost:8000/api/v1/quality…` (rate-limit 100/min, Redis) |
 | Health endpoints | `GET /health` (compose healthcheck), `GET /health/ready`, `GET /health/quality` |
-| DB | PostgreSQL schema `quality` (container `faceattend-postgres`, db `faceattend_db`) |
+| DB | PostgreSQL schema `quality` (container `fae-postgres`, db `faceattend_db`) |
 | Key env vars | `DB_SCHEMA` / `PG_SCHEMA` (default `quality`), `DATABASE_URL`-style pool config |
 | Dashboard / alert channel | Not deployed — see `13-operations/observability.md` |
 | Target RTO / RPO | Not defined (`NFR-010` pending) |
@@ -50,11 +50,11 @@ Compose restarts it.
 
 ```bash
 docker compose -f back-end/docker-compose.yml logs --tail=100 ms-quality
-docker exec faceattend-postgres pg_isready -U postgres -d faceattend_db
+docker exec fae-postgres pg_isready -U postgres -d faceattend_db
 ```
 
 **Decision tree:**
-- `faceattend-postgres` unhealthy → fix Postgres first; quality comes back automatically
+- `fae-postgres` unhealthy → fix Postgres first; quality comes back automatically
 - Schema `quality` missing (fresh environment) → the configuration Liquibase chain has not run →
   section 4.2
 - Credentials/schema env wrong → check `DB_SCHEMA`/`PG_SCHEMA` (must be a plain identifier)
@@ -77,7 +77,7 @@ Check pool settings and slow queries (`SET search_path TO quality;` then inspect
 ### 4.1 Database
 
 ```bash
-docker exec -it faceattend-postgres psql -U postgres -d faceattend_db
+docker exec -it fae-postgres psql -U postgres -d faceattend_db
 ```
 ```sql
 SET search_path TO quality;
@@ -92,7 +92,7 @@ Quality has **no changelog of its own**: its schema and tables ship with the **c
 chain (see `data-model.md`).
 
 ```bash
-docker logs faceattend-configuration-liquibase 2>&1 | tail -50
+docker logs fae-configuration-liquibase 2>&1 | tail -50
 ```
 
 A failed changeset stops the chain — fix **forward** with a new changeset; never edit an applied one.

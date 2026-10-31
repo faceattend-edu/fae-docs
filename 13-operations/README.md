@@ -31,11 +31,11 @@ FaceAttend-Edu operates as a **Polyglot Modular Monolith** deployed via Docker C
 
 ### Infrastructure Topology
 The system is divided into three isolated network tiers to ensure that the data layer is never directly exposed to the public internet:
-- **`faceattend-edge`**: Handles traffic between the Frontend (Expo Web/Nginx) and the API Gateway (Kong).
+- **`fae-edge`**: Handles traffic between the Frontend (Expo Web/Nginx) and the API Gateway (Kong).
 - **`faceattend-app`**: Internal communication between the API Gateway and the microservices (Java, TS, Python) and Redis cache.
-- **`faceattend-data`**: Restricted access for microservices to reach PostgreSQL, MongoDB, Kafka, and Liquibase migration tools.
+- **`fae-data`**: Restricted access for microservices to reach PostgreSQL, MongoDB, Kafka, and Liquibase migration tools.
 
-**Security Note:** This design ensures that the database and message broker are unreachable from the `faceattend-edge` network, preventing direct external access to the data tier.
+**Security Note:** This design ensures that the database and message broker are unreachable from the `fae-edge` network, preventing direct external access to the data tier.
 
 ### Component Stack
 | Layer | Technology | Purpose |
@@ -99,6 +99,6 @@ Data backup and recovery strategy.
 ## Questions this section must answer
 
 - **How do we know the system is failing before users report it?** Through Kong Gateway logs and container healthchecks.
-- **What exactly do we do when service X fails at 3am?** Check the specific microservice logs and verify the `faceattend-data` network connectivity.
+- **What exactly do we do when service X fails at 3am?** Check the specific microservice logs and verify the `fae-data` network connectivity.
 - **How much downtime can we have per month?** Defined by the SLO (e.g., 99.9%).
 - **How do we recover data if the DB fails?** Restore PG/Mongo backups and re-run the Liquibase migration chain.

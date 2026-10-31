@@ -98,7 +98,7 @@ must survive restarts — `src/main.ts` refuses to boot without Postgres (no in-
 ## Schema migration
 
 **Tool:** Liquibase 4.29, chained containers (ADR-010) — quality rides along in the
-**configuration** chain (`faceattend-configuration-liquibase`), not in a chain of its own.
+**configuration** chain (`fae-configuration-liquibase`), not in a chain of its own.
 **Script location:** `FULL/database/07-ms-configuration-db/` (see above).
 **Naming convention:** `NNN-<action>-<object>-table.yaml`, additive, each with a rollback.
 

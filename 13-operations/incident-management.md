@@ -46,7 +46,7 @@ We classify incidents based on the impact on the academic process (attendance re
 **Immediate Action:**
 1. Acknowledge the alert to stop the notification loop.
 2. Notify the team in Slack `#incidents`: *"Investigating P[N] - [Brief Description] - [Your Name]"*.
-3. Check the general health of the three networks (`faceattend-edge`, `app`, `data`).
+3. Check the general health of the three networks (`fae-edge`, `app`, `data`).
 
 ### Step 2: CLASSIFY (5-10 min)
 Determine severity:
@@ -72,7 +72,7 @@ Initial update template for stakeholders:
 **Diagnostic path for FaceAttend-Edu:**
 1. **Kong Gateway:** Check `kong.yml` and logs. Is the request reaching the microservice?
 2. **Microservice Logs:** Check the specific runtime log (Spring Boot, Fastify or FastAPI).
-3. **Network Connectivity:** Verify if the service can reach the data tier (`faceattend-data` network).
+3. **Network Connectivity:** Verify if the service can reach the data tier (`fae-data` network).
 4. **Biometric Hardware:** If the issue is only with fingerprints, check if the *DigitalPersona Runtime* is installed on the client machines (see `COMPOSE.md` §9).
 5. **Database State:** Check for locked rows in PostgreSQL or high CPU in MongoDB.
 

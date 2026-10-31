@@ -14,10 +14,10 @@
 | Field | Value |
 |-------|-------|
 | Local port | 8084 |
-| Compose service / container | `ms-scheduling` / `faceattend-ms-scheduling` |
+| Compose service / container | `ms-scheduling` / `fae-ms-scheduling` |
 | Through Kong | `http://localhost:8000/api/v1/{environments,schedule-blocks,class-sessions}` |
 | Health endpoint | `GET /actuator/health` → `"status":"UP"` (compose healthcheck) |
-| DB | PostgreSQL schema `scheduling` (container `faceattend-postgres`, db `faceattend_db`) |
+| DB | PostgreSQL schema `scheduling` (container `fae-postgres`, db `faceattend_db`) |
 | Dashboard / alert channel | Not deployed — see `13-operations/observability.md` |
 | Target RTO / RPO | Not defined (`NFR-010` pending) |
 
@@ -45,7 +45,7 @@ docker compose -f back-end/docker-compose.yml logs --tail=100 ms-scheduling
 
 **Decision tree:**
 - Liquibase migration failed → section 4.2
-- `postgres` unreachable → check `faceattend-postgres` health; scheduling cannot work without DB
+- `postgres` unreachable → check `fae-postgres` health; scheduling cannot work without DB
 - Crash loop after a deploy → roll back (section 5.2)
 
 ### Symptom: "slot not available" errors spike
@@ -68,7 +68,7 @@ GROUP BY 1,2,3 HAVING COUNT(*) > 1;
 ### 4.1 Database
 
 ```bash
-docker exec -it faceattend-postgres psql -U postgres -d faceattend_db
+docker exec -it fae-postgres psql -U postgres -d faceattend_db
 ```
 ```sql
 SET search_path TO scheduling;
@@ -82,7 +82,7 @@ Changesets live in `FULL/database/04-ms-scheduling-db/` and run automatically on
 (Liquibase chain, ADR-010). Inspect the run:
 
 ```bash
-docker logs faceattend-scheduling-liquibase 2>&1 | tail -50
+docker logs fae-scheduling-liquibase 2>&1 | tail -50
 ```
 
 A failed changeset stops the chain — fix **forward** with a new changeset; never edit an applied one.

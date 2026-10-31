@@ -312,7 +312,7 @@ docker compose ps                       # which ones are unhealthy?
 docker compose ps | grep postgres
 docker compose logs postgres
 ```
-Remember services talk to postgres over the `faceattend-data` network by name
+Remember services talk to postgres over the `fae-data` network by name
 (`postgres:5432`), not `localhost`. If you run a service **natively**, it connects
 via `localhost:5432` using the root `.env` — make sure `database/` is up
 (`cd database && docker compose up -d`).
@@ -379,9 +379,9 @@ cd tools/seed-api-test-data && npm run seed            # E2E smoke across all se
 
 # Database access
 docker exec -it $(docker ps -qf name=postgres) psql -U postgres -d faceattend_db   # 8 schemas
-docker exec -it faceattend-mongo mongosh -u mongoadmin -p mongopass faceattend_biometric
-docker exec -it faceattend-redis redis-cli
-docker exec faceattend-kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+docker exec -it fae-mongo mongosh -u mongoadmin -p mongopass faceattend_biometric
+docker exec -it fae-redis redis-cli
+docker exec fae-kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 
 # Frontends
 cd front-end/Web    && npx expo start --web        # dev server on :3000 (Kong CORS allows it)

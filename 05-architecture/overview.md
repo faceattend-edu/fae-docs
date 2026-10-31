@@ -168,8 +168,8 @@ Biometric vectors are encrypted at rest (ADR-016), PII minimized in logs/traces 
 
 Network segmentation reinforces this in depth at the Docker level (root `docker-compose.yml`,
 which `include:`-merges `database/docker-compose.yml` and `back-end/docker-compose.yml` into one
-project — re-verified 2026-10 against `FULL/`): three bridge networks, **`faceattend-edge`** (Kong
-+ frontend-web only), **`faceattend-app`** (Kong + all 9 services + Redis), and **`faceattend-data`**
+project — re-verified 2026-10 against `FULL/`): three bridge networks, **`fae-edge`** (Kong
++ frontend-web only), **`faceattend-app`** (Kong + all 9 services + Redis), and **`fae-data`**
 (all 9 services + PostgreSQL + MongoDB + Kafka) — a client can reach Kong but never a service's or
 a data store's port directly from the edge network. PostgreSQL is also published on
 `127.0.0.1:5432` for local dev, same loopback-only pattern as the 9 services' own ports.

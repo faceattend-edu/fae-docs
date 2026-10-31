@@ -14,11 +14,11 @@
 | Field | Value |
 |-------|-------|
 | Local port | 8088 |
-| Compose service / container | `ms-notification` / `faceattend-ms-notification` |
+| Compose service / container | `ms-notification` / `fae-ms-notification` |
 | Through Kong | `http://localhost:8000/api/v1/{alerts,alert-types}` |
 | Health endpoints | `GET /health`, `GET /api/v1/health`, `GET /health/quality` |
 | Internal endpoint | `POST /api/v1/emails` (not routed publicly; called by Identity) |
-| DB | PostgreSQL schema `notification` (container `faceattend-postgres`, db `faceattend_db`) |
+| DB | PostgreSQL schema `notification` (container `fae-postgres`, db `faceattend_db`) |
 | Key env vars | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`/`SMTP_PASSWORD`, `EMAIL_INTERNAL_TOKEN`, `KAFKA_BROKERS` (enables the Kafka consumers — without it the service starts with none; the class-session consumer and schedulers also need `NOTIFICATION_SERVICE_USERNAME`/`PASSWORD`), `IDENTITY_URL`, `AUTHORIZATION_URL`, `WEBHOOK_URL`/`WEBHOOK_SECRET` |
 | Dashboard / alert channel | Not deployed — see `13-operations/observability.md` |
 | Target RTO / RPO | Not defined (`NFR-010` pending) |
@@ -46,7 +46,7 @@ docker compose -f back-end/docker-compose.yml logs --tail=100 ms-notification
 ```
 
 **Decision tree:**
-- `postgres unavailable — refusing to start` (or similar boot error) → check `faceattend-postgres`
+- `postgres unavailable — refusing to start` (or similar boot error) → check `fae-postgres`
 - Liquibase seed failed → section 4.2
 - Crash loop after a deploy → roll back (section 5.2)
 
@@ -75,7 +75,7 @@ session auth when routed externally). Rotate the token in the env file and resta
 ### 4.1 Database
 
 ```bash
-docker exec -it faceattend-postgres psql -U postgres -d faceattend_db
+docker exec -it fae-postgres psql -U postgres -d faceattend_db
 ```
 ```sql
 SET search_path TO notification;
@@ -89,7 +89,7 @@ Changesets live in `FULL/database/08-ms-notification-db/` and run on `docker com
 (Liquibase chain, ADR-010):
 
 ```bash
-docker logs faceattend-notification-liquibase 2>&1 | tail -50
+docker logs fae-notification-liquibase 2>&1 | tail -50
 ```
 
 Seeds are idempotent; a failed changeset stops the chain — fix **forward**, never edit an applied
